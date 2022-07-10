@@ -39,7 +39,7 @@ client.on('ready', () => {
 })
 
 client.on('messageReactionAdd', async (reaction,user) =>{
-    if(reaction.message.channelId === '994233301256638514'){
+    if(reaction.message.channelId === '904080384843714560'){
         if(reaction.partial){
             try {
                 await reaction.fetch();

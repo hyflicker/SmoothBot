@@ -39,8 +39,9 @@ client.on('ready', () => {
 })
 
 client.on('messageReactionAdd', async (reaction,user) =>{
-    console.log(`${user.username} reactionAdd with ${reaction.emoji.name}`)
+    
     if(reaction.message.channelId === '904080384843714560'){
+        console.log(`${user.username} reactionAdd with ${reaction.emoji.name}`)
         if(reaction.partial){
             try {
                 await reaction.fetch();
@@ -59,9 +60,8 @@ client.on('messageReactionAdd', async (reaction,user) =>{
 })
 
 client.on('messageReactionRemove', async (reaction,user) =>{
-    // console.log(reaction.emoji)
-    console.log(`${user.username} reactionRemove with ${reaction.emoji.name}`)
     if(reaction.message.channelId === '904080384843714560'){
+        console.log(`${user.username} reactionRemove with ${reaction.emoji.name}`)
         try {
             await reaction.fetch();
             db.execute(`SELECT * FROM reactionroles WHERE reactionName = '${reaction.emoji.name}' AND messageId = ${reaction.message.id}`, (err, results) => {

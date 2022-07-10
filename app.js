@@ -39,6 +39,7 @@ client.on('ready', () => {
 })
 
 client.on('messageReactionAdd', async (reaction,user) =>{
+    console.log(`${user.username} reactionAdd with ${reaction.emoji.name}`)
     if(reaction.message.channelId === '904080384843714560'){
         if(reaction.partial){
             try {
@@ -58,6 +59,8 @@ client.on('messageReactionAdd', async (reaction,user) =>{
 })
 
 client.on('messageReactionRemove', async (reaction,user) =>{
+    // console.log(reaction.emoji)
+    console.log(`${user.username} reactionRemove with ${reaction.emoji.name}`)
     if(reaction.message.channelId === '904080384843714560'){
         try {
             await reaction.fetch();

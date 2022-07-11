@@ -26,8 +26,11 @@ function handleDisconnect() {
     });
 
     db.on('error', function(err){
-        if(err.fatal == true){
+        console.log('db error', err);
+        if(err.code === 'PROTOCOL_CONNECTION_LOST'){
             handleDisconnect();
+        }else{
+            throw err;
         }
     });
 }

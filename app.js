@@ -1,7 +1,6 @@
 require('./slashBuilder')
 const Discord = require('discord.js');
 const mysql = require('mysql2');
-const {MessageActionRow, MessageButton, MessageEmbed, MessageSelectMenu, TextInputComponent, Modal} = require('discord.js');
 const client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES, Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS],
     partials: ['MESSAGE','CHANNEL','REACTION']
 });
@@ -94,7 +93,6 @@ client.on('interactionCreate', async interaction => {
             let newCode = interaction.options['_hoistedOptions'][0].value;
             db.execute(`UPDATE commandresponses SET commandResponse = '${newCode}' WHERE commandName = 'code'`, async (err, res)=>{
                 if(err)console.error;
-                console.log(res)
                 if(res.affectedRows > 0){
                     await interaction.reply({content: `Code is now updated to ${newCode}`, ephemeral: true})
                 }

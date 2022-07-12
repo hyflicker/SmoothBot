@@ -84,17 +84,31 @@ client.on('interactionCreate', async interaction => {
     if(!interaction.isCommand()) return;
     switch (interaction.commandName) {
         case "code":
-            db.execute(`SELECT * FROM commandresponses WHERE commandName = '${interaction.commandName}'`, async (err,res) => {
-                if(err)console.error;
-                await interaction.reply({content:`The code is ${res[0].commandResponse}!`, ephemeral: true})
+            db.execute(`SELECT * FROM commandresponses WHERE commandName = '${interaction.commandName}' AND guildId = ${interaction.guildId}`, async (err,res) => {
+                if(err)console.log(err);
+                if(res.length > 0){
+                    await interaction.reply({content:`The code is ${res[0].commandResponse}!`, ephemeral: true})
+                }else{
+                    await interaction.reply({content: `Error! Please try again later or have a mod to create a code.`})
+                }
+                
             })
             break;
         case "codechange":
             let newCode = interaction.options['_hoistedOptions'][0].value;
-            db.execute(`UPDATE commandresponses SET commandResponse = '${newCode}' WHERE commandName = 'code'`, async (err, res)=>{
+            db.execute(`UPDATE commandresponses SET commandResponse = '${newCode}' WHERE commandName = 'code' AND guildId = ${interaction.guildId}`, async (err, res)=>{
                 if(err)console.error;
                 if(res.affectedRows > 0){
                     await interaction.reply({content: `Code is now updated to ${newCode}`, ephemeral: true})
+                }else{
+                    db.execute(`INSERT INTO commandresponses (commandName,commandResponse,guildId) VALUES ('code','${newCode}','${interaction.guildId}')`, async (err,results) => {
+                        if(err)console.log(err);
+                        if(results.affectedRows > 0){
+                            await interaction.reply({content: `Code is now updated to ${newCode}`, ephemeral: true});
+                        }else{
+                            await interaction.reply({content: `Error! Please try again later.`})
+                        }
+                    })
                 }
             })
             break;

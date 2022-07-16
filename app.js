@@ -30,7 +30,7 @@ function handleDisconnect() {
     db.on('error', function(err){
         console.log('db error', err);
         errorHandler(err)
-        if(err.code === 'PROTOCOL_CONNECTION_LOST'){
+        if((err.code === 'PROTOCOL_CONNECTION_LOST') || (err.code === 4031)){
             handleDisconnect();
         }else{
             throw err;
@@ -62,7 +62,10 @@ client.on('messageReactionAdd', async (reaction,user) =>{
             try {
                 await reaction.fetch();
                 db.execute(`SELECT * FROM reactionroles WHERE reactionName = '${reaction.emoji.name}' AND messageId = ${reaction.message.id}`, (err, results) => {
-                    if(err){errorHandler(err); return};
+                    if(err){
+                        errorHandler(err);
+                        return;
+                    }
                     if(results.length > 0){
                         reaction.message.guild.members.cache.get(user.id).roles.add(`${results[0].roleId}`)
                     }
@@ -82,7 +85,10 @@ client.on('messageReactionRemove', async (reaction,user) =>{
         try {
             await reaction.fetch();
             db.execute(`SELECT * FROM reactionroles WHERE reactionName = '${reaction.emoji.name}' AND messageId = ${reaction.message.id}`, (err, results) => {
-                if(err){errorHandler(err); return};
+                if(err){
+                    errorHandler(err);
+                    return;
+                }
                 if(results.length > 0){
                     reaction.message.guild.members.cache.get(user.id).roles.remove(`${results[0].roleId}`)
                 }

@@ -7,7 +7,13 @@ export async function messageReaction(reaction, user, type = String) {
 			db
 				.promise()
 				.execute(
-					`SELECT * FROM reactionroles WHERE reactionName = '${reaction.emoji.name}' AND messageId = ${reaction.message.id} AND channelId = '${reaction.message.channelId}' AND '${reaction.message.guildId}'`,
+					`SELECT * FROM reactionroles WHERE reactionName = ? AND messageId = ? AND channelId = ? AND ?`,
+					[
+						reaction.emoji.name,
+						reaction.message.id,
+						reaction.message.channelId,
+						reaction.message.guildId,
+					],
 				)
 				.then(([results]) => {
 					if (results.length > 0) {
@@ -31,7 +37,13 @@ export async function messageReaction(reaction, user, type = String) {
 			db
 				.promise()
 				.execute(
-					`SELECT * FROM reactionroles WHERE reactionName = '${reaction.emoji.name}' AND messageId = ${reaction.message.id} AND channelId = '${reaction.message.channelId}' AND '${reaction.message.guildId}'`,
+					`SELECT * FROM reactionroles WHERE reactionName = ? AND messageId = ? AND channelId = ? AND ?`,
+					[
+						reaction.emoji.name,
+						reaction.message.id,
+						reaction.message.channelId,
+						reaction.message.guildId,
+					],
 				)
 				.then(([results]) => {
 					if (results.length > 0) {

@@ -6,8 +6,8 @@ import {
 	TextInputComponent,
 	Modal,
 } from "discord.js";
-import { db } from "../../database.js";
-import { errorHandler } from "../../errorLogging.js";
+import { db } from "../../../Utilities/database.js";
+import { errorHandler } from "../../../Utilities/errorLogging.js";
 let data;
 
 async function destination(interaction) {

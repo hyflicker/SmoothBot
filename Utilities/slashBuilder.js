@@ -26,6 +26,40 @@ const smoothCommands = [
 				PermissionFlagsBits.Administrator,
 		),
 	new SlashCommandBuilder()
+		.setName("info")
+		.setDescription("Get's info about a user.")
+		.addUserOption((option) =>
+			option
+				.setName("user")
+				.setDescription("@ the user you would like info on.")
+				.setRequired(true),
+		)
+		.setDefaultMemberPermissions(
+			PermissionFlagsBits.ViewAuditLog ||
+				PermissionFlagsBits.ManageRoles ||
+				PermissionFlagsBits.Administrator,
+		),
+	new SlashCommandBuilder()
+		.setName("warn")
+		.setDescription("Warns a user by direct message and creates a case against user.")
+		.addUserOption((option) =>
+			option
+				.setName("user")
+				.setDescription("@ the user you would like info on.")
+				.setRequired(true),
+		)
+		.addStringOption((option) =>
+			option
+				.setName("message")
+				.setDescription("Message that will be stored in the case and sent to the user's DMs")
+				.setRequired(true),
+		)
+		.setDefaultMemberPermissions(
+			PermissionFlagsBits.ViewAuditLog ||
+				PermissionFlagsBits.ManageRoles ||
+				PermissionFlagsBits.Administrator,
+		),
+	new SlashCommandBuilder()
 		.setName("reaction_roles")
 		.setDescription(
 			"adds a new message with reactions to react to, to get a role.",

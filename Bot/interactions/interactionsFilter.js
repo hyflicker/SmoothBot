@@ -1,29 +1,47 @@
-import create from "./options/create.js";
+import code from "./options/code.js";
 import reactionRoles from "./options/reactionRoles.js";
+import moderation from "./options/moderation.js"
 
 export function interactionFilter(interaction, type = String) {
-	if (!interaction.isCommand()) return;
-	switch (type) {
-		case "CREATE":
-			createOption(interaction);
-			break;
-
-		default:
-			break;
+	if (interaction.isCommand()){
+		switch (type) {
+			case "CREATE":
+				createOption(interaction);
+				break;
+	
+			default:
+				break;
+		}
+	}else if(interaction.isButton()){
+		switch (type) {
+			case "CREATE":
+				moderation.caseButtons(interaction,interaction.customId);
+				break;
+			default:
+				break;
+		}
+	}else{
+		return
 	}
 }
 
 function createOption(interaction) {
 	switch (interaction.commandName) {
 		case "code":
-			create.code(interaction);
+			code.code(interaction);
 			break;
 		case "codechange":
-			create.codeChange(interaction);
+			code.codeChange(interaction);
 			break;
 		case "reaction_roles":
 			reactionRolesOption(interaction);
 			break;
+		case "info":{
+			moderation.info(interaction)
+		}
+		case "warn": {
+			moderation.warn(interaction);
+		}
 		default:
 			break;
 	}

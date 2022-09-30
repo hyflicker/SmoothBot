@@ -1,9 +1,10 @@
 import express from "express";
 import bodyParser from "body-parser";
+import crypto from "crypto";
 const app = express();
 const router = express.Router();
 
-const port = 3000;
+const port = 3009;
 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
@@ -21,6 +22,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x
 // 	// default to plain-text. send()
 // 	res.type("txt").send("Not found");
 // });
+app.use(router);
 
 router
 	.route("/socials/tiktok")
@@ -31,7 +33,29 @@ router
 		console.log(req.body);
 	});
 
-app.use(router);
+router
+	.route("/socials/discord/bot")
+	.post((req,res,next) => {
+		decrypt(req.body.data)
+
+		res.sendStatus(200)
+	})
+
+
+// function decrypt (data){
+// 	console.log(data)
+// 	const algorithm = "aes-192-cbc";
+//     const initVector = crypto.randomBytes(16);
+// 	const Securitykey = crypto.randomBytes(32);
+// 	const decipher = crypto.createDecipheriv(algorithm,Securitykey,initVector);
+// 	const decryptedData = decipher.update(data,"hex","utf-8");
+// 	return decryptedData += decipher.final("utf8");
+// }	
 app.listen(port, () => {
 	console.log(`Smooth API is now live on Port:${port}!`);
 });
+
+
+function decrypt(data){
+	return crypto.createCipheriv()
+}

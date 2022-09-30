@@ -170,13 +170,18 @@ async function updateCaseCount(caseNum,guildId){
 async function caseEmbed(guildId,caseId){
     const data = await db.promise().execute(`SELECT * FROM cases WHERE guildId = ? AND caseId = ?`,[guildId,caseId])
         .then(([res]) => {
-            return res[0];
+            if(res.length > 0){
+                return res[0];
+            }else{
+                return false;
+            } 
         })
         .catch((err) => {
             errorHandler(err)
-            return
+            return false;
         })
-    const numCases = await db.promise().execute(`SELECT Count(userName) FROM cases WHERE guildId = ? AND userName = ?`,[guildId,data.userName])
+    if(data){
+        const numCases = await db.promise().execute(`SELECT Count(userName) FROM cases WHERE guildId = ? AND userName = ?`,[guildId,data.userName])
         .then(([res]) => {
             return res[0][`Count(userName)`];
         })
@@ -215,6 +220,10 @@ async function caseEmbed(guildId,caseId){
         }
     }
      return embed;
+    }else{
+        return 'NO-CASE';
+    }
+
 
 }
 
@@ -241,7 +250,7 @@ async function addCase(interaction,type){
         console.log(err)
         await interaction.reply({content:`There was an ERROR. Please try again.`,ephemeral: true})
     })
-    }else if(type === 'caseButtons'){
+    }else{
         const caseData = collector[collector.findIndex((e)=> e.Id === interaction.message.interaction.id)]
         insertCase(`${interaction.guildId}`,`${cases+1}`,`${caseData.User.username}`,`${caseData.User.id}`,`${caseData.Moderator.username}`,`${caseData.Moderator.id}`,`${caseData.Message}`,`${type}`)
         .then(async(res) => {
@@ -255,6 +264,8 @@ async function addCase(interaction,type){
                 .catch(err=>{
                     errorHandler(err);
                 })
+            }else{
+                await interaction.update({embeds:[await caseEmbed(interaction.guildId,cases+1)],components:[],ephemeral:true})
             }
         })
     }
@@ -266,7 +277,7 @@ async function checkCaseDestination(guildId){
         if(res[0].caseDestination){
             return res[0].caseDestination;
         }else{
-            return false
+            return false;
         }
     })
     .catch((err) => {
@@ -315,4 +326,58 @@ async function warn (interaction){
     }
 }
 
-export default { info, warn, caseButtons }
+async function cases (type,interaction){
+    switch (type) {
+        case 'add':
+            const user = interaction.options._hoistedOptions[0].user;
+            collectorObject(interaction.id,user,interaction.user,interaction.options._hoistedOptions.find((msg) => msg.type === "STRING").value);
+            addCase(interaction,'NON-DM')
+            .catch(err => 
+                    errorHandler(err)
+                )
+            break;
+        case 'delete':
+            
+            break;
+        case 'view':
+            casesView(interaction)
+            break;
+    
+        default:
+            break;
+    }
+}
+
+async function casesView (interaction){
+    const caseId = interaction.options._hoistedOptions[0].value;
+    let data = await caseEmbed(interaction.guildId,caseId);
+    let embed;
+    if((data) && (data !== 'NO-CASE')){
+       embed = data;
+    }else if(data === 'NO-CASE'){
+        embed = {
+            color: `#FEE75C`,
+            title: `ERROR - No Case Found`,
+            description: `Looks like the case you are looking for does not exist.`,
+        }
+    }else{
+        embed = {
+            color: `#FEE75C`,
+            title: `ERROR - Unknown`,
+            description: `Looks like we hit an unexpected error.`,
+        }
+        
+    }
+    await interaction.reply({embeds: [embed],ephemeral:true})
+    
+}
+
+async function casesDelete (interaction){
+
+}
+
+async function errorResponse(interaction){
+    await interaction.reply({content: `There was an error processing your request. Please try again later.`,ephemeral:true})
+}
+
+export default { info, warn, caseButtons, cases }

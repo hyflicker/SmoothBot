@@ -26,6 +26,7 @@ export function interactionFilter(interaction, type = String) {
 }
 
 function createOption(interaction) {
+	// console.log(interaction)
 	switch (interaction.commandName) {
 		case "code":
 			code.code(interaction);
@@ -41,6 +42,9 @@ function createOption(interaction) {
 		}
 		case "warn": {
 			moderation.warn(interaction);
+		}
+		case "cases": {
+			moderation.cases(interaction.options._subcommand,interaction)
 		}
 		default:
 			break;

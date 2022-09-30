@@ -20,6 +20,10 @@ export async function messageReaction(reaction, user, type = String) {
 						let roleName = reaction.message.guild.roles.cache
 							.filter((role) => role.id === `${results[0].roleId}`)
 							.map((role) => role.name)[0];
+						if(!roleName){
+							console.log(roleName)
+							return
+						}
 						reaction.message.guild.members.cache
 							.get(user.id)
 							.roles.add(`${results[0].roleId}`);
@@ -50,6 +54,10 @@ export async function messageReaction(reaction, user, type = String) {
 						let roleName = reaction.message.guild.roles.cache
 							.filter((role) => role.id === `${results[0].roleId}`)
 							.map((role) => role.name)[0];
+						if(!roleName){
+							console.log(roleName)
+							return
+						}
 						reaction.message.guild.members.cache
 							.get(user.id)
 							.roles.remove(`${results[0].roleId}`);

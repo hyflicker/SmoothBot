@@ -60,6 +60,53 @@ const smoothCommands = [
 				PermissionFlagsBits.Administrator,
 		),
 	new SlashCommandBuilder()
+		.setName("cases")
+		.setDescription("group of commands for managing cases")
+		.addSubcommand(subcommand => 
+			subcommand
+				.setName(`view`)
+				.setDescription(`lets you view the case`)
+				.addIntegerOption(option => 
+					option 
+						.setName('case_number')	
+						.setDescription(`the case number you'd like to view`)
+						.setRequired(true),
+				)
+		)
+		.addSubcommand(subcommand => 
+			subcommand
+				.setName(`delete`)
+				.setDescription(`deletes the selected case number entered`)	
+				.addIntegerOption(option =>
+					option
+						.setName(`case_number`)	
+						.setDescription(`the case number you'd like to delete`)
+						.setRequired(true),
+				)
+		)
+		.addSubcommand(subcommand => 
+			subcommand
+				.setName(`add`)
+				.setDescription(`adds a case without notifying the user`)	
+				.addUserOption((option) =>
+				option
+					.setName("user")
+					.setDescription("@ the user you would like info on.")
+					.setRequired(true),
+			)
+			.addStringOption((option) =>
+				option
+					.setName("message")
+					.setDescription("Message that will be stored in the case and sent to the user's DMs")
+					.setRequired(true),
+			)
+		)
+		.setDefaultMemberPermissions(
+			PermissionFlagsBits.ViewAuditLog ||
+				PermissionFlagsBits.ManageRoles ||
+				PermissionFlagsBits.Administrator,
+		),
+	new SlashCommandBuilder()
 		.setName("reaction_roles")
 		.setDescription(
 			"adds a new message with reactions to react to, to get a role.",

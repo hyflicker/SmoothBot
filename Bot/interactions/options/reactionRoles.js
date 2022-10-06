@@ -7,7 +7,7 @@ import {
 	Modal,
 } from "discord.js";
 import { db } from "../../../Utilities/database.js";
-import { errorHandler } from "../../../Utilities/errorLogging.js";
+import { errorHandler } from "../../../Utilities/logging.js";
 let data;
 
 async function destination(interaction) {

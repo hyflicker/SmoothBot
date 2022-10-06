@@ -1,5 +1,5 @@
 import { db } from "../../../Utilities/database.js";
-import { errorHandler } from "../../../Utilities/errorLogging.js";
+import { errorHandler } from "../../../Utilities/logging.js";
 export async function messageReaction(reaction, user, type = String) {
 	await reaction.fetch();
 	switch (type) {

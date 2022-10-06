@@ -12,6 +12,16 @@ export function messageFilter(type = String, message, reaction, user) {
 				});
 			}
 			break;
+		case "boostMessageReaction":
+			if (message.guildId === "839568492113297498") {
+				let emoji = message.guild.emojis.cache
+					.filter((emote) => emote.name === "doctorrLove")
+					.map((emote) => emote)[0];
+				message.react(`${emoji.id}`).catch((err) => {
+					console.error(err);
+				});
+			}
+			break;
 		case "messageReactionAdd":
 			messageReaction(reaction, user, "ADD");
 			break;

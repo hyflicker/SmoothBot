@@ -5,7 +5,7 @@ import { interactionFilter } from "./interactions/interactionsFilter.js";
 import Discord from "discord.js";
 import { messageFilter } from "./messages/messageFilter.js";
 import { db } from "../Utilities/database.js";
-import { errorHandler } from "../Utilities/errorLogging.js";
+import { errorHandler, messageLogger } from "../Utilities/logging.js";
 const client = new Discord.Client({
 	intents: [
 		Discord.Intents.FLAGS.GUILDS,
@@ -31,8 +31,13 @@ client.on("guildCreate", async (guild) =>{
 
 //Reaction Controler for join messages.
 client.on("messageCreate", (message) => {
+	// console.log(message)
 	if (message.type === "GUILD_MEMBER_JOIN") {
+		messageLogger(message.type,message.author.username,message.content);
 		messageFilter("joinMessageReaction", message);
+	}else if(message.type === "USER_PREMIUM_GUILD_SUBSCRIPTION"){
+		messageLogger(message.type,message.author.username,message.content);
+		messageFilter("boostMessageReaction", message);
 	}
 });
 

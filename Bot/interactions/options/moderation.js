@@ -1,5 +1,5 @@
 import { db } from "../../../Utilities/database.js";
-import { errorHandler } from "../../../Utilities/errorLogging.js";
+import { errorHandler } from "../../../Utilities/logging.js";
 import {
 	MessageActionRow,
 	MessageButton,
